@@ -1,57 +1,44 @@
-/* ===== SIDEBAR ===== */
+/* =========================
+RB SYSTEM - SCRIPT
+========================= */
 
-const menus =
-document.querySelectorAll(".menu");
 
-const pages =
-document.querySelectorAll(".page");
+/* SIDEBAR */
+
+const menus=document.querySelectorAll(".menu");
+const pages=document.querySelectorAll(".page");
 
 menus.forEach(btn=>{
 
-btn.addEventListener(
-"click",
-()=>{
+btn.addEventListener("click",()=>{
 
-menus.forEach(
-m=>
-m.classList.remove(
-"active"
-)
+menus.forEach(x=>
+x.classList.remove("active")
 );
 
-pages.forEach(
-p=>
-p.classList.remove(
-"active-page"
-)
+pages.forEach(x=>
+x.classList.remove("active-page")
 );
 
-btn.classList.add(
-"active"
-);
+btn.classList.add("active");
 
 document
-
 .getElementById(
 btn.dataset.page
 )
-
 .classList.add(
 "active-page"
-
 );
 
-}
-
-);
+});
 
 });
 
 
 
-/* ===== STORAGE ===== */
+/* STORAGE */
 
-function getReports(){
+function load(){
 
 return JSON.parse(
 
@@ -59,21 +46,19 @@ localStorage.getItem(
 "rb_reports"
 )
 
-)||[];
+||"[]"
+
+);
 
 }
 
-
-
-function saveReports(data){
+function save(data){
 
 localStorage.setItem(
 
 "rb_reports",
 
-JSON.stringify(
-data
-)
+JSON.stringify(data)
 
 );
 
@@ -81,20 +66,18 @@ data
 
 
 
-/* ===== IMAGE ===== */
+/* IMAGE */
 
-async function imageBase64(file){
+function fileToBase64(file){
 
 return new Promise(
 
 (resolve)=>{
 
-let reader=
-
+const reader=
 new FileReader();
 
 reader.onload=
-
 ()=>resolve(
 reader.result
 );
@@ -111,23 +94,178 @@ file
 
 
 
-/* ===== RENDER ===== */
+/* SAVE */
 
-function renderReports(){
+const saveBtn=
+document.getElementById(
+"save"
+);
+
+if(saveBtn){
+
+saveBtn.onclick=
+
+async()=>{
+
+let name=
+
+document
+.getElementById(
+"name"
+)?.value||
+
+"";
+
+if(!name){
+
+alert(
+"Setup Name লিখেন"
+);
+
+return;
+
+}
+
+
+
+let img="";
+
+let photo=
+
+document
+.getElementById(
+"photoFile"
+);
+
+if(
+
+photo?.files[0]
+
+){
+
+img=
+
+await fileToBase64(
+
+photo.files[0]
+
+);
+
+}
+
+
+
+let obj={
+
+name,
+
+market:
+
+document
+.getElementById(
+"market"
+)?.value||
+
+"",
+
+pair:
+
+document
+.getElementById(
+"pair"
+)?.value||
+
+"",
+
+win:
+
+document
+.getElementById(
+"win"
+)?.value||
+
+"",
+
+note:
+
+document
+.getElementById(
+"note"
+)?.value||
+
+"",
+
+video:
+
+document
+.getElementById(
+"video"
+)?.value||
+
+"",
+
+photo:img
+
+};
+
+
+
+let data=
+load();
+
+data.unshift(
+obj
+);
+
+save(
+data
+);
+
+render();
+
+
+
+document
+.querySelectorAll(
+"input,textarea"
+)
+
+.forEach(
+x=>
+x.value=""
+);
+
+
+
+alert(
+"Saved"
+);
+
+};
+
+}
+
+
+
+/* REPORT */
+
+function render(){
 
 let box=
 
-document.getElementById(
+document
+.getElementById(
 "reportList"
 );
 
 if(!box)return;
 
-let data=
-
-getReports();
-
 box.innerHTML="";
+
+let data=
+load();
+
+
 
 data.forEach((x,i)=>{
 
@@ -148,11 +286,11 @@ x.photo
 src="${x.photo}"
 
 style="
-width:120px;
-height:120px;
-border-radius:15px;
+width:130px;
+height:130px;
+border-radius:14px;
 object-fit:cover;
-margin-bottom:10px;
+margin-bottom:15px;
 ">
 
 `
@@ -198,18 +336,22 @@ gap:10px;
 ">
 
 <button
+
 style="
-background:#15b832;
-padding:10px;
+background:#19c43d;
+color:white;
+padding:12px;
 border:none;
-border-radius:10px;
+border-radius:12px;
 "
 
 onclick="
 playVideo(
 ${i}
 )
-">
+"
+
+>
 
 ▶ Play
 
@@ -217,18 +359,22 @@ ${i}
 
 
 <button
+
 style="
-background:#1858ff;
-padding:10px;
+background:#1956ff;
+color:white;
+padding:12px;
 border:none;
-border-radius:10px;
+border-radius:12px;
 "
 
 onclick="
 viewPhoto(
 ${i}
 )
-">
+"
+
+>
 
 🖼 View
 
@@ -236,18 +382,22 @@ ${i}
 
 
 <button
+
 style="
 background:red;
-padding:10px;
+color:white;
+padding:12px;
 border:none;
-border-radius:10px;
+border-radius:12px;
 "
 
 onclick="
 deleteReport(
 ${i}
 )
-">
+"
+
+>
 
 🗑 Delete
 
@@ -265,229 +415,96 @@ ${i}
 
 
 
-/* ===== SAVE ===== */
+/* VIDEO */
 
-const save=
+function playVideo(i){
 
-document.getElementById(
-"save"
-);
+let url=
 
-if(save){
+load()
 
-save.onclick=
+[i]
 
-async()=>{
+?.video;
 
-let photo="";
-
-let file=
-
-document.getElementById(
-"photoFile"
-);
-
-if(
-
-file?.files[0]
-
-){
-
-photo=
-
-await imageBase64(
-
-file.files[0]
-
-);
-
-}
-
-
-
-let obj={
-
-name:
-
-document
-.getElementById(
-"name"
-).value,
-
-market:
-
-document
-.getElementById(
-"market"
-).value,
-
-pair:
-
-document
-.getElementById(
-"pair"
-).value,
-
-win:
-
-document
-.getElementById(
-"win"
-).value,
-
-note:
-
-document
-.getElementById(
-"note"
-).value,
-
-video:
-
-document
-.getElementById(
-"video"
-).value,
-
-photo
-
-};
-
-
-
-if(
-
-!obj.name
-
-){
+if(!url){
 
 alert(
-"Write Setup Name"
+"No Video"
 );
 
 return;
 
 }
 
-
-
-let data=
-
-getReports();
-
-data.unshift(
-obj
-);
-
-saveReports(
-data
-);
-
-renderReports();
-
-
-
-document
-
-.querySelectorAll(
-
-"input,textarea"
-
-)
-
-.forEach(
-
-x=>
-x.value=""
-
-);
-
-
-
-alert(
-"Saved"
-);
-
-};
-
-}
-
-
-
-/* ===== VIDEO ===== */
-
-function playVideo(i){
-
-let url=
-
-getReports()
-
-[i]
-
-.video;
-
-if(url)
-
 window.open(
-url
+url,
+"_blank"
 );
 
 }
 
 
 
-/* ===== PHOTO ===== */
+/* PHOTO */
 
 function viewPhoto(i){
 
 let img=
 
-getReports()
+load()
 
 [i]
 
-.photo;
+?.photo;
 
-if(img){
+if(!img){
+
+alert(
+"No Photo"
+);
+
+return;
+
+}
 
 window.open(
-img
+img,
+"_blank"
 );
 
 }
 
-}
 
 
-
-/* ===== DELETE ===== */
+/* DELETE */
 
 function deleteReport(i){
 
 let data=
-
-getReports();
+load();
 
 data.splice(
 i,
 1
 );
 
-saveReports(
+save(
 data
 );
 
-renderReports();
+render();
 
 }
 
 
 
-/* ===== SEARCH ===== */
+/* SEARCH */
 
 let search=
 
-document.getElementById(
+document
+.getElementById(
 "search"
 );
 
@@ -511,13 +528,11 @@ document
 ".card"
 )
 
-.forEach(
+.forEach(c=>{
 
-x=>{
+c.style.display=
 
-x.style.display=
-
-x.innerText
+c.innerText
 
 .toLowerCase()
 
@@ -533,9 +548,7 @@ txt
 
 "none";
 
-}
-
-);
+});
 
 }
 
@@ -545,6 +558,6 @@ txt
 
 
 
-/* ===== START ===== */
+/* START */
 
-renderReports();
+render();
