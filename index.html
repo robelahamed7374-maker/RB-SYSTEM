@@ -1,322 +1,230 @@
-<!DOCTYPE html>
-<html lang="en">
+/* SIDEBAR */
 
-<head>
+document.querySelectorAll(".menu").forEach(btn=>{
 
-<meta charset="UTF-8">
+btn.onclick=()=>{
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1">
+document.querySelectorAll(".menu")
+.forEach(x=>x.classList.remove("active"));
 
-<title>
-RB SYSTEM
-</title>
+document.querySelectorAll(".page")
+.forEach(x=>x.classList.remove("active-page"));
 
-<link
-rel="stylesheet"
-href="style.css">
+btn.classList.add("active");
 
-</head>
+document
+.getElementById(btn.dataset.page)
+.classList.add("active-page");
 
-<body>
+};
 
-<div class="app">
-
-<!-- SIDEBAR -->
-
-<aside class="sidebar">
-
-<div class="logo">
-
-<h1>
-
-<span>
-RB
-</span>
-
-SYSTEM
-
-</h1>
-
-<p>
-
-TRADING DASHBOARD
-
-</p>
-
-</div>
-
-
-<button class="menu active"
-data-page="trading">
-
-📊 Trading Setup
-
-</button>
-
-<button class="menu"
-data-page="reports">
-
-📁 Reports Box
-
-</button>
-
-<button class="menu"
-data-page="media">
-
-🖼 Media Box
-
-</button>
-
-<button class="menu"
-data-page="notes">
-
-📝 Notes Box
-
-</button>
-
-<button class="menu"
-data-page="history">
-
-🕒 History Box
-
-</button>
-
-<button class="menu"
-data-page="settings">
-
-⚙ Settings Box
-
-</button>
-
-</aside>
+});
 
 
 
-<!-- MAIN -->
+/* STORAGE */
 
-<main class="main">
+function load(){
+
+return JSON.parse(
+
+localStorage.getItem(
+"rb_reports"
+
+)
+
+||"[]"
+
+);
+
+}
 
 
 
-<!-- TRADING -->
+function save(data){
 
-<section
-id="trading"
-class="page active-page">
+localStorage.setItem(
 
-<div class="box">
+"rb_reports",
+
+JSON.stringify(data)
+
+);
+
+}
+
+
+
+/* SAVE BUTTON */
+
+document
+
+.getElementById("save")
+
+.addEventListener(
+
+"click",
+
+function(){
+
+let obj={
+
+name:
+
+document.getElementById("name")?.value||"",
+
+market:
+
+document.getElementById("market")?.value||"",
+
+pair:
+
+document.getElementById("pair")?.value||"",
+
+win:
+
+document.getElementById("win")?.value||"",
+
+note:
+
+document.getElementById("note")?.value||""
+
+};
+
+
+
+if(
+
+obj.name===""
+
+){
+
+alert(
+"Setup Name লিখেন"
+);
+
+return;
+
+}
+
+
+
+let data=
+
+load();
+
+data.unshift(
+obj
+);
+
+save(
+data
+);
+
+
+
+render();
+
+
+
+alert(
+"Saved"
+
+);
+
+}
+
+);
+
+
+
+/* RENDER */
+
+function render(){
+
+let box=
+
+document.getElementById(
+"reportList"
+);
+
+if(!box)return;
+
+box.innerHTML="";
+
+load()
+
+.forEach((x,i)=>{
+
+box.innerHTML+=`
+
+<div class="card">
 
 <h2>
 
-📊 Trading Setup
+${x.name}
 
 </h2>
 
-<input
-id="name"
-placeholder="Setup Name">
+<br>
 
-<select
-id="market">
+Market:
+${x.market}
 
-<option>
-OTC
-</option>
+<br><br>
 
-<option>
-Real Market
-</option>
+Pair:
+${x.pair}
 
-</select>
+<br><br>
 
-<input
-id="pair"
-placeholder="Pair">
+Win:
+${x.win}
 
-<input
-id="win"
-placeholder="Win Rate">
+<br><br>
 
-<textarea
-id="note"
-placeholder="Write Strategy">
-</textarea>
+${x.note}
 
-<input
-id="video"
-placeholder="Video Link">
-
-<input
-id="photo"
-placeholder="Photo Description">
-
-<input
-<input id="photoFile" type="file" accept="image/*">
+<br><br>
 
 <button
-id="save">
+onclick="del(${i})">
 
-💾 SAVE
-
-</button>
-
-</div>
-
-</section>
-
-
-
-<!-- REPORTS -->
-
-<section
-id="reports"
-class="page">
-
-<div class="box">
-
-<h2>
-
-📁 Reports Box
-
-</h2>
-
-<input
-placeholder="Search..."
-id="search">
-
-<div
-id="reportList">
-
-</div>
-
-</div>
-
-</section>
-
-
-
-<!-- MEDIA -->
-
-<section
-id="media"
-class="page">
-
-<div class="box">
-
-<h2>
-
-🖼 Media Box
-
-</h2>
-
-<div
-id="mediaList">
-
-No Media
-
-</div>
-
-</div>
-
-</section>
-
-
-
-<!-- NOTES -->
-
-<section
-id="notes"
-class="page">
-
-<div class="box">
-
-<h2>
-
-📝 Notes Box
-
-</h2>
-
-<textarea
-id="noteText">
-</textarea>
-
-<button>
-
-Save Note
+Delete
 
 </button>
 
 </div>
 
-</section>
+`;
+
+});
+
+}
 
 
 
-<!-- HISTORY -->
+/* DELETE */
 
-<section
-id="history"
-class="page">
+function del(i){
 
-<div class="box">
+let data=
 
-<h2>
+load();
 
-🕒 History Box
+data.splice(
+i,
+1
+);
 
-</h2>
+save(
+data
+);
 
-<div>
+render();
 
-No History
-
-</div>
-
-</div>
-
-</section>
+}
 
 
 
-<!-- SETTINGS -->
-
-<section
-id="settings"
-class="page">
-
-<div class="box">
-
-<h2>
-
-⚙ Settings
-
-</h2>
-
-<button>
-
-Clear Data
-
-</button>
-
-</div>
-
-</section>
-
-
-</main>
-
-</div>
-
-<script
-src="script.js">
-</script>
-<div id="photoModal" class="modal">
-  <div class="modal-content">
-    <button id="closePhotoModal" class="modal-close">✕</button>
-    <img id="modalPhoto" alt="Preview">
-  </div>
-</div>
-</body>
-
-</html>
+render();
