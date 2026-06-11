@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html>
-<head>
 
+<head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
 
 <title>RB SYSTEM</title>
 
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet"
+href="style.css">
 
 </head>
 
@@ -20,59 +22,54 @@
 <div class="sidebar">
 
 <h1>
-
 <span>RB</span>
-
 SYSTEM
-
 </h1>
 
-<p>
-TRADING DASHBOARD
-</p>
+<p>TRADING DASHBOARD</p>
 
-
-<button class="tab active"
-data-page="setup">
+<button
+class="menu active"
+data-page="trade">
 
 📊 Trading Setup
 
 </button>
 
-
-<button class="tab"
-data-page="reports">
+<button
+class="menu"
+data-page="report">
 
 📁 Reports Box
 
 </button>
 
-
-<button class="tab"
+<button
+class="menu"
 data-page="media">
 
 🖼 Media Box
 
 </button>
 
-
-<button class="tab"
+<button
+class="menu"
 data-page="notes">
 
 📝 Notes Box
 
 </button>
 
-
-<button class="tab"
+<button
+class="menu"
 data-page="history">
 
-🕒 History Box
+🕒 History
 
 </button>
 
-
-<button class="tab"
+<button
+class="menu"
 data-page="settings">
 
 ⚙ Settings
@@ -81,24 +78,20 @@ data-page="settings">
 
 </div>
 
-
+<!-- CONTENT -->
 
 <div class="content">
 
+<!-- TRADE -->
 
-
-<!-- SETUP -->
-
-<section
-id="setup"
+<div
+id="trade"
 class="page active">
 
-<div class="box">
+<div class="card">
 
 <h2>
-
 📊 Trading Setup
-
 </h2>
 
 <input
@@ -135,8 +128,8 @@ id="video"
 placeholder="Video Link">
 
 <input
-type="file"
-id="photo">
+id="photo"
+type="file">
 
 <button
 id="save">
@@ -147,50 +140,44 @@ id="save">
 
 </div>
 
-</section>
-
-
+</div>
 
 <!-- REPORT -->
 
-<section
-id="reports"
+<div
+id="report"
 class="page">
 
-<div class="box">
+<div class="card">
 
 <h2>
-
 📁 Reports Box
-
 </h2>
 
 <input
-id="search"
 placeholder="Search">
 
 <div
 id="reportList">
-</div>
+
+No Reports
 
 </div>
 
-</section>
+</div>
 
-
+</div>
 
 <!-- MEDIA -->
 
-<section
+<div
 id="media"
 class="page">
 
-<div class="box">
+<div class="card">
 
 <h2>
-
 🖼 Media Box
-
 </h2>
 
 <div
@@ -202,57 +189,41 @@ No Media
 
 </div>
 
-</section>
-
-
+</div>
 
 <!-- NOTES -->
 
-<section
+<div
 id="notes"
 class="page">
 
-<div class="box">
+<div class="card">
 
 <h2>
-
 📝 Notes Box
-
 </h2>
 
-<textarea
-id="notesText">
+<textarea>
 
 </textarea>
 
-<button>
-
-Save Note
-
-</button>
+</div>
 
 </div>
 
-</section>
-
-
-
 <!-- HISTORY -->
 
-<section
+<div
 id="history"
 class="page">
 
-<div class="box">
+<div class="card">
 
 <h2>
-
 🕒 History
-
 </h2>
 
-<div
-id="historyList">
+<div>
 
 No History
 
@@ -260,32 +231,21 @@ No History
 
 </div>
 
-</section>
-
-
+</div>
 
 <!-- SETTINGS -->
 
-<section
+<div
 id="settings"
 class="page">
 
-<div class="box">
+<div class="card">
 
 <h2>
-
 ⚙ Settings
-
 </h2>
 
-<button
-onclick="
-
-localStorage.clear();
-
-location.reload();
-
-">
+<button>
 
 Clear Data
 
@@ -293,16 +253,15 @@ Clear Data
 
 </div>
 
-</section>
-
-
-
 </div>
 
 </div>
 
+</div>
 
-<script src="script.js"></script>
+<script
+src="script.js">
+</script>
 
 </body>
 
