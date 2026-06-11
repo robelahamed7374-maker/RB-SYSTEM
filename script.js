@@ -1,4 +1,4 @@
-/* ========= SIDEBAR NAVIGATION ========= */
+/* ========= PAGES ========= */
 
 const menus =
 document.querySelectorAll(
@@ -10,12 +10,9 @@ document.querySelectorAll(
 ".page"
 );
 
-menus.forEach((btn,index)=>{
+menus.forEach(btn=>{
 
-btn.addEventListener(
-"click",
-
-()=>{
+btn.onclick=()=>{
 
 menus.forEach(
 x=>
@@ -35,194 +32,374 @@ btn.classList.add(
 "active"
 );
 
-if(index===0){
-
 document
 .getElementById(
-"trading"
+btn.dataset.page
 )
+
 .classList.add(
 "active-page"
 );
 
-}
-
-if(index===1){
-
-document
-.getElementById(
-"reports"
-)
-.classList.add(
-"active-page"
-);
-
-}
-
-if(index===2){
-
-document
-.getElementById(
-"media"
-)
-.classList.add(
-"active-page"
-);
-
-}
-
-if(index===3){
-
-document
-.getElementById(
-"notes"
-)
-.classList.add(
-"active-page"
-);
-
-}
-
-if(index===4){
-
-document
-.getElementById(
-"history"
-)
-.classList.add(
-"active-page"
-);
-
-}
-
-if(index===5){
-
-document
-.getElementById(
-"settings"
-)
-.classList.add(
-"active-page"
-);
-
-}
-
-}
-
-);
+};
 
 });
 
 
-/* ========= REPORT AUTO LOAD ========= */
 
-function updateReports(){
+/* ========= SAVE ========= */
 
-let reports=
+const save =
 
-JSON.parse(
-localStorage.getItem(
-"rb_system"
-)
-)||[];
+document.getElementById(
+"save"
+);
 
-let box=
+const reportList=
 
 document.getElementById(
 "reportList"
 );
 
-if(!box)
-return;
 
-box.innerHTML="";
 
-reports.forEach(
-r=>{
+function getData(){
 
-box.innerHTML+=`
+return JSON.parse(
+
+localStorage.getItem(
+"rb_reports"
+)
+
+)||[];
+
+}
+
+
+
+function setData(data){
+
+localStorage.setItem(
+
+"rb_reports",
+
+JSON.stringify(
+data
+)
+
+);
+
+}
+
+
+
+function render(){
+
+let data=
+getData();
+
+reportList.innerHTML="";
+
+data.forEach((x,i)=>{
+
+reportList.innerHTML+=`
 
 <div class="card">
 
-<h3>
+<h2>
 
-${r.name}
+${x.name}
 
-</h3>
+</h2>
 
 <br>
 
 Market:
-${r.market}
+${x.market}
 
 <br><br>
 
 Pair:
-${r.pair}
+${x.pair}
 
 <br><br>
 
-Win:
-${r.win}
+Win Rate:
+${x.win}
+
+<br><br>
+
+${x.note}
+
+<br><br>
+
+
+<button
+onclick="playVideo(
+'${x.video}'
+)">
+
+▶ Play
+
+</button>
+
+
+<button
+onclick="deleteItem(
+${i}
+)">
+
+🗑 Delete
+
+</button>
 
 </div>
 
 `;
 
-}
-
-);
+});
 
 }
 
-updateReports();
 
 
-/* ========= NOTES ========= */
+save.onclick=()=>{
 
-function saveNote(){
+let obj={
 
-let note=
+name:
 
-prompt(
-"Write note"
+document
+.getElementById(
+"name"
+).value,
+
+market:
+
+document
+.getElementById(
+"market"
+).value,
+
+pair:
+
+document
+.getElementById(
+"pair"
+).value,
+
+win:
+
+document
+.getElementById(
+"win"
+).value,
+
+note:
+
+document
+.getElementById(
+"note"
+).value,
+
+video:
+
+document
+.getElementById(
+"video"
+).value
+
+};
+
+
+
+if(
+!obj.name
+){
+
+alert(
+"Setup Name Required"
 );
 
-if(!note)
 return;
 
+}
+
+
+
 let data=
-
-JSON.parse(
-localStorage.getItem(
-"rb_notes"
-)
-
-)||[];
+getData();
 
 data.unshift(
-note
+obj
 );
 
-localStorage.setItem(
-
-"rb_notes",
-
-JSON.stringify(
-data)
-
+setData(
+data
 );
+
+render();
 
 alert(
 "Saved"
 );
 
+};
+
+
+
+/* ========= DELETE ========= */
+
+function deleteItem(i){
+
+let data=
+getData();
+
+data.splice(
+i,
+1
+);
+
+setData(
+data
+);
+
+render();
+
 }
+
+
+
+/* ========= VIDEO ========= */
+
+function playVideo(url){
+
+if(url){
+
+window.open(
+url
+);
+
+}else{
+
+alert(
+"No Video"
+);
+
+}
+
+}
+
+
+
+/* ========= SEARCH ========= */
+
+const search=
+
+document.getElementById(
+"search"
+);
+
+if(search){
+
+search.addEventListener(
+
+"input",
+
+()=>{
+
+let text=
+
+search.value
+
+.toLowerCase();
+
+document
+
+.querySelectorAll(
+".card"
+)
+
+.forEach(c=>{
+
+c.style.display=
+
+c.innerText
+
+.toLowerCase()
+
+.includes(
+text
+)
+
+?
+
+"block"
+
+:
+
+"none";
+
+});
+
+}
+
+);
+
+}
+
+
+
+/* ========= NOTES ========= */
+
+const noteBtn=
+
+document.querySelector(
+"#notes button"
+);
+
+if(noteBtn){
+
+noteBtn.onclick=()=>{
+
+let txt=
+
+document
+.getElementById(
+"noteText"
+)
+
+.value;
+
+localStorage.setItem(
+
+"rb_note",
+
+txt
+
+);
+
+alert(
+"Note Saved"
+);
+
+};
+
+}
+
 
 
 /* ========= SETTINGS ========= */
 
-function clearAll(){
+const clear=
+
+document.querySelector(
+"#settings button"
+);
+
+if(clear){
+
+clear.onclick=()=>{
 
 if(
 
@@ -238,4 +415,10 @@ location.reload();
 
 }
 
+};
+
 }
+
+
+
+render();
