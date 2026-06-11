@@ -1,230 +1,116 @@
-/* SIDEBAR */
+<!DOCTYPE html>
+<html>
 
-document.querySelectorAll(".menu").forEach(btn=>{
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RB SYSTEM</title>
 
-btn.onclick=()=>{
+<link rel="stylesheet" href="style.css">
+</head>
 
-document.querySelectorAll(".menu")
-.forEach(x=>x.classList.remove("active"));
+<body>
 
-document.querySelectorAll(".page")
-.forEach(x=>x.classList.remove("active-page"));
+<div class="app">
 
-btn.classList.add("active");
+<div class="sidebar">
 
-document
-.getElementById(btn.dataset.page)
-.classList.add("active-page");
+<h1>
+<span>RB</span>
+SYSTEM
+</h1>
 
-};
+<p>TRADING DASHBOARD</p>
 
-});
+<button class="menu active">
+📊 Trading Setup
+</button>
 
+<button class="menu">
+📁 Reports Box
+</button>
 
+<button class="menu">
+🖼 Media Box
+</button>
 
-/* STORAGE */
+<button class="menu">
+📝 Notes Box
+</button>
 
-function load(){
+<button class="menu">
+🕒 History Box
+</button>
 
-return JSON.parse(
+<button class="menu">
+⚙ Settings
+</button>
 
-localStorage.getItem(
-"rb_reports"
+</div>
 
-)
 
-||"[]"
+<div class="content">
 
-);
+<div class="box">
 
-}
+<h2>📊 Trading Setup</h2>
 
+<input id="name" placeholder="Setup Name">
 
+<select id="market">
 
-function save(data){
+<option>OTC</option>
 
-localStorage.setItem(
+<option>Real Market</option>
 
-"rb_reports",
+</select>
 
-JSON.stringify(data)
+<input id="pair" placeholder="Pair">
 
-);
+<input id="win" placeholder="Win Rate">
 
-}
+<textarea
+id="note"
+placeholder="Strategy">
+</textarea>
 
+<input
+id="video"
+placeholder="Video Link">
 
+<input
+type="file"
+id="photo">
 
-/* SAVE BUTTON */
+<button id="save">
 
-document
-
-.getElementById("save")
-
-.addEventListener(
-
-"click",
-
-function(){
-
-let obj={
-
-name:
-
-document.getElementById("name")?.value||"",
-
-market:
-
-document.getElementById("market")?.value||"",
-
-pair:
-
-document.getElementById("pair")?.value||"",
-
-win:
-
-document.getElementById("win")?.value||"",
-
-note:
-
-document.getElementById("note")?.value||""
-
-};
-
-
-
-if(
-
-obj.name===""
-
-){
-
-alert(
-"Setup Name লিখেন"
-);
-
-return;
-
-}
-
-
-
-let data=
-
-load();
-
-data.unshift(
-obj
-);
-
-save(
-data
-);
-
-
-
-render();
-
-
-
-alert(
-"Saved"
-
-);
-
-}
-
-);
-
-
-
-/* RENDER */
-
-function render(){
-
-let box=
-
-document.getElementById(
-"reportList"
-);
-
-if(!box)return;
-
-box.innerHTML="";
-
-load()
-
-.forEach((x,i)=>{
-
-box.innerHTML+=`
-
-<div class="card">
-
-<h2>
-
-${x.name}
-
-</h2>
-
-<br>
-
-Market:
-${x.market}
-
-<br><br>
-
-Pair:
-${x.pair}
-
-<br><br>
-
-Win:
-${x.win}
-
-<br><br>
-
-${x.note}
-
-<br><br>
-
-<button
-onclick="del(${i})">
-
-Delete
+💾 SAVE
 
 </button>
 
 </div>
 
-`;
-
-});
-
-}
 
 
+<div class="box">
 
-/* DELETE */
+<h2>📁 Reports Box</h2>
 
-function del(i){
+<input
+id="search"
+placeholder="Search">
 
-let data=
+<div
+id="reportList">
+</div>
 
-load();
+</div>
 
-data.splice(
-i,
-1
-);
+</div>
 
-save(
-data
-);
+</div>
 
-render();
+<script src="script.js"></script>
 
-}
-
-
-
-render();
+</body>
+</html>
