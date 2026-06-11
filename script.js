@@ -1,181 +1,550 @@
-const menus = document.querySelectorAll(".menu");
-const pages = document.querySelectorAll(".page");
+/* ===== SIDEBAR ===== */
 
-menus.forEach(btn => {
-  btn.onclick = () => {
-    menus.forEach(x => x.classList.remove("active"));
-    pages.forEach(x => x.classList.remove("active-page"));
-    btn.classList.add("active");
-    document.getElementById(btn.dataset.page).classList.add("active-page");
-  };
+const menus =
+document.querySelectorAll(".menu");
+
+const pages =
+document.querySelectorAll(".page");
+
+menus.forEach(btn=>{
+
+btn.addEventListener(
+"click",
+()=>{
+
+menus.forEach(
+m=>
+m.classList.remove(
+"active"
+)
+);
+
+pages.forEach(
+p=>
+p.classList.remove(
+"active-page"
+)
+);
+
+btn.classList.add(
+"active"
+);
+
+document
+
+.getElementById(
+btn.dataset.page
+)
+
+.classList.add(
+"active-page"
+
+);
+
+}
+
+);
+
 });
 
-const save = document.getElementById("save");
-const reportList = document.getElementById("reportList");
-const search = document.getElementById("search");
-const photoFile = document.getElementById("photoFile");
 
-const photoModal = document.getElementById("photoModal");
-const modalPhoto = document.getElementById("modalPhoto");
-const closePhotoModal = document.getElementById("closePhotoModal");
 
-function getData() {
-  return JSON.parse(localStorage.getItem("rb_reports")) || [];
+/* ===== STORAGE ===== */
+
+function getReports(){
+
+return JSON.parse(
+
+localStorage.getItem(
+"rb_reports"
+)
+
+)||[];
+
 }
 
-function setData(data) {
-  localStorage.setItem("rb_reports", JSON.stringify(data));
+
+
+function saveReports(data){
+
+localStorage.setItem(
+
+"rb_reports",
+
+JSON.stringify(
+data
+)
+
+);
+
 }
 
-function fileToDataURL(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
+
+
+/* ===== IMAGE ===== */
+
+async function imageBase64(file){
+
+return new Promise(
+
+(resolve)=>{
+
+let reader=
+
+new FileReader();
+
+reader.onload=
+
+()=>resolve(
+reader.result
+);
+
+reader.readAsDataURL(
+file
+);
+
 }
 
-function openPhotoModal(src) {
-  if (!src) return;
-  modalPhoto.src = src;
-  photoModal.classList.add("show");
+);
+
 }
 
-function closeModal() {
-  photoModal.classList.remove("show");
-  modalPhoto.src = "";
+
+
+/* ===== RENDER ===== */
+
+function renderReports(){
+
+let box=
+
+document.getElementById(
+"reportList"
+);
+
+if(!box)return;
+
+let data=
+
+getReports();
+
+box.innerHTML="";
+
+data.forEach((x,i)=>{
+
+box.innerHTML+=`
+
+<div class="card">
+
+<div>
+
+${
+x.photo
+
+?
+
+`
+
+<img
+src="${x.photo}"
+
+style="
+width:120px;
+height:120px;
+border-radius:15px;
+object-fit:cover;
+margin-bottom:10px;
+">
+
+`
+
+:
+
+""
 }
 
-closePhotoModal.onclick = closeModal;
-photoModal.onclick = (e) => {
-  if (e.target === photoModal) closeModal();
+<h2>
+
+${x.name}
+
+</h2>
+
+<br>
+
+Market:
+${x.market}
+
+<br><br>
+
+Pair:
+${x.pair}
+
+<br><br>
+
+Win Rate:
+${x.win}
+
+<br><br>
+
+${x.note}
+
+</div>
+
+
+<div
+style="
+display:flex;
+flex-direction:column;
+gap:10px;
+">
+
+<button
+style="
+background:#15b832;
+padding:10px;
+border:none;
+border-radius:10px;
+"
+
+onclick="
+playVideo(
+${i}
+)
+">
+
+▶ Play
+
+</button>
+
+
+<button
+style="
+background:#1858ff;
+padding:10px;
+border:none;
+border-radius:10px;
+"
+
+onclick="
+viewPhoto(
+${i}
+)
+">
+
+🖼 View
+
+</button>
+
+
+<button
+style="
+background:red;
+padding:10px;
+border:none;
+border-radius:10px;
+"
+
+onclick="
+deleteReport(
+${i}
+)
+">
+
+🗑 Delete
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+
+
+/* ===== SAVE ===== */
+
+const save=
+
+document.getElementById(
+"save"
+);
+
+if(save){
+
+save.onclick=
+
+async()=>{
+
+let photo="";
+
+let file=
+
+document.getElementById(
+"photoFile"
+);
+
+if(
+
+file?.files[0]
+
+){
+
+photo=
+
+await imageBase64(
+
+file.files[0]
+
+);
+
+}
+
+
+
+let obj={
+
+name:
+
+document
+.getElementById(
+"name"
+).value,
+
+market:
+
+document
+.getElementById(
+"market"
+).value,
+
+pair:
+
+document
+.getElementById(
+"pair"
+).value,
+
+win:
+
+document
+.getElementById(
+"win"
+).value,
+
+note:
+
+document
+.getElementById(
+"note"
+).value,
+
+video:
+
+document
+.getElementById(
+"video"
+).value,
+
+photo
+
 };
 
-function render() {
-  const data = getData();
-  reportList.innerHTML = "";
 
-  if (!data.length) {
-    reportList.innerHTML = `<div class="card"><div class="card-left">No Reports</div></div>`;
-    return;
-  }
 
-  data.forEach((x, i) => {
-    reportList.innerHTML += `
-      <div class="card">
-        <div style="display:flex;gap:16px;flex:1;">
-          ${x.photo ? `<img class="card-photo" src="${x.photo}" alt="photo">` : ""}
-          <div class="card-left">
-            <h2>${x.name || "No Title"}</h2>
-            <br>
-            <div>Market: ${x.market || ""}</div>
-            <br>
-            <div>Pair: ${x.pair || ""}</div>
-            <br>
-            <div>Win Rate: ${x.win || ""}</div>
-            <br>
-            <div>${x.note || ""}</div>
-          </div>
-        </div>
+if(
 
-        <div class="card-right">
-          <button class="action-btn btn-play" onclick="playVideo(${i})">▶ Play Video</button>
-          <button class="action-btn btn-photo" onclick="viewPhoto(${i})">🖼 View Photo</button>
-          <button class="action-btn btn-delete" onclick="deleteItem(${i})">🗑 Delete</button>
-        </div>
-      </div>
-    `;
-  });
+!obj.name
+
+){
+
+alert(
+"Write Setup Name"
+);
+
+return;
+
 }
 
-save.onclick = async () => {
-  const obj = {
-    name: document.getElementById("name").value.trim(),
-    market: document.getElementById("market").value.trim(),
-    pair: document.getElementById("pair").value.trim(),
-    win: document.getElementById("win").value.trim(),
-    note: document.getElementById("note").value.trim(),
-    video: document.getElementById("video").value.trim(),
-    photo: ""
-  };
 
-  if (!obj.name) {
-    alert("Setup Name Required");
-    return;
-  }
 
-  if (photoFile && photoFile.files && photoFile.files[0]) {
-    obj.photo = await fileToDataURL(photoFile.files[0]);
-  }
+let data=
 
-  const data = getData();
-  data.unshift(obj);
-  setData(data);
-  render();
+getReports();
 
-  document.getElementById("name").value = "";
-  document.getElementById("pair").value = "";
-  document.getElementById("win").value = "";
-  document.getElementById("note").value = "";
-  document.getElementById("video").value = "";
-  document.getElementById("photo").value = "";
-  if (photoFile) photoFile.value = "";
+data.unshift(
+obj
+);
+
+saveReports(
+data
+);
+
+renderReports();
+
+
+
+document
+
+.querySelectorAll(
+
+"input,textarea"
+
+)
+
+.forEach(
+
+x=>
+x.value=""
+
+);
+
+
+
+alert(
+"Saved"
+);
+
 };
 
-function deleteItem(i) {
-  const data = getData();
-  data.splice(i, 1);
-  setData(data);
-  render();
 }
 
-function playVideo(i) {
-  const data = getData();
-  const url = data[i]?.video;
-  if (url) {
-    window.open(url, "_blank");
-  } else {
-    alert("No Video");
-  }
+
+
+/* ===== VIDEO ===== */
+
+function playVideo(i){
+
+let url=
+
+getReports()
+
+[i]
+
+.video;
+
+if(url)
+
+window.open(
+url
+);
+
 }
 
-function viewPhoto(i) {
-  const data = getData();
-  const src = data[i]?.photo;
-  if (src) {
-    openPhotoModal(src);
-  } else {
-    alert("No Photo");
-  }
+
+
+/* ===== PHOTO ===== */
+
+function viewPhoto(i){
+
+let img=
+
+getReports()
+
+[i]
+
+.photo;
+
+if(img){
+
+window.open(
+img
+);
+
 }
 
-if (search) {
-  search.addEventListener("input", () => {
-    const text = search.value.toLowerCase();
-    document.querySelectorAll(".card").forEach(c => {
-      c.style.display = c.innerText.toLowerCase().includes(text) ? "flex" : "none";
-    });
-  });
 }
 
-const noteBtn = document.querySelector("#notes button");
-if (noteBtn) {
-  noteBtn.onclick = () => {
-    const txt = document.getElementById("noteText").value;
-    localStorage.setItem("rb_note", txt);
-    alert("Note Saved");
-  };
+
+
+/* ===== DELETE ===== */
+
+function deleteReport(i){
+
+let data=
+
+getReports();
+
+data.splice(
+i,
+1
+);
+
+saveReports(
+data
+);
+
+renderReports();
+
 }
 
-const clear = document.querySelector("#settings button");
-if (clear) {
-  clear.onclick = () => {
-    if (confirm("Delete all data?")) {
-      localStorage.clear();
-      location.reload();
-    }
-  };
+
+
+/* ===== SEARCH ===== */
+
+let search=
+
+document.getElementById(
+"search"
+);
+
+if(search){
+
+search.addEventListener(
+
+"input",
+
+()=>{
+
+let txt=
+
+search.value
+
+.toLowerCase();
+
+document
+
+.querySelectorAll(
+".card"
+)
+
+.forEach(
+
+x=>{
+
+x.style.display=
+
+x.innerText
+
+.toLowerCase()
+
+.includes(
+txt
+)
+
+?
+
+"flex"
+
+:
+
+"none";
+
 }
 
-render();
+);
+
+}
+
+);
+
+}
+
+
+
+/* ===== START ===== */
+
+renderReports();
