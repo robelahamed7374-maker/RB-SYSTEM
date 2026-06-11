@@ -186,7 +186,61 @@ media.innerHTML=
 "No Media";
 
 return;
+function viewPhoto(photo){
 
+if(
+!photo
+||
+photo===""
+
+){
+
+alert(
+"এই রিপোর্টে ছবি সেভ করা নাই"
+);
+
+return;
+
+}
+
+let win=
+window.open();
+
+win.document.write(`
+
+<style>
+
+body{
+
+margin:0;
+
+background:black;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+height:100vh;
+
+}
+
+img{
+
+max-width:100%;
+
+max-height:100%;
+
+}
+
+</style>
+
+<img src="${photo}">
+
+`);
+
+}
 }
 
 box.innerHTML="";
