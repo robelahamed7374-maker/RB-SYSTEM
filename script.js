@@ -1,189 +1,277 @@
-// RB SYSTEM NEW SCRIPT
+// SIDEBAR
 
-const STORAGE="rb_reports";
+const menus =
+document.querySelectorAll(".menu");
 
-function load(){
-return JSON.parse(
-localStorage.getItem(STORAGE)||"[]"
+const pages =
+document.querySelectorAll(".page");
+
+menus.forEach(btn=>{
+
+btn.onclick=()=>{
+
+menus.forEach(x=>
+x.classList.remove("active")
 );
-}
 
-function save(data){
-localStorage.setItem(
-STORAGE,
-JSON.stringify(data)
+pages.forEach(x=>
+x.classList.remove("active")
 );
-}
 
-function toBase64(file){
+btn.classList.add("active");
 
-return new Promise((ok)=>{
+document
+.getElementById(
+btn.dataset.page
+)
+.classList
+.add("active");
 
-if(!file){
+};
 
-ok("");
+});
+
+/* STORAGE */
+
+let reports=
+JSON.parse(
+localStorage.getItem(
+"rb_reports"
+)
+)||[];
+
+/* SAVE */
+
+document
+.getElementById("save")
+.onclick=()=>{
+
+let name=
+document
+.getElementById("name")
+.value;
+
+let market=
+document
+.getElementById("market")
+.value;
+
+let pair=
+document
+.getElementById("pair")
+.value;
+
+let win=
+document
+.getElementById("win")
+.value;
+
+let note=
+document
+.getElementById("note")
+.value;
+
+let video=
+document
+.getElementById("video")
+.value;
+
+let file=
+document
+.getElementById("photo")
+.files[0];
+
+if(!name){
+
+alert(
+"Setup Name লাগবে"
+);
 
 return;
 
 }
 
-const reader=
+if(file){
+
+let reader=
 new FileReader();
 
-reader.onload=
-()=>ok(
-reader.result
-);
+reader.onload=e=>{
+
+saveData({
+
+name,
+market,
+pair,
+win,
+note,
+video,
+
+photo:
+e.target.result
+
+});
+
+};
 
 reader.readAsDataURL(
-file);
+file
+);
+
+}else{
+
+saveData({
+
+name,
+market,
+pair,
+win,
+note,
+video,
+
+photo:""
 
 });
 
 }
 
+};
 
+function saveData(obj){
 
-async function saveSetup(){
-
-const photoFile=
-document
-.getElementById(
-"photo"
-)?.files[0];
-
-const photo=
-await toBase64(
-photoFile
+reports.unshift(
+obj
 );
 
-const data=
-load();
+localStorage.setItem(
 
-data.unshift({
+"rb_reports",
 
-name:
-document.getElementById("name").value,
+JSON.stringify(
+reports
+)
 
-market:
-document.getElementById("market").value,
-
-pair:
-document.getElementById("pair").value,
-
-win:
-document.getElementById("win").value,
-
-note:
-document.getElementById("note").value,
-
-video:
-document.getElementById("video").value,
-
-photo
-
-});
-
-save(data);
+);
 
 render();
 
-alert("Saved");
+alert(
+"Saved"
+);
 
 }
 
-
+/* RENDER */
 
 function render(){
 
-const box=
-document.getElementById(
+let box=
+document
+.getElementById(
 "reportList"
 );
 
-if(!box)return;
+let media=
+document
+.getElementById(
+"mediaList"
+);
+
+if(!reports.length){
+
+box.innerHTML=
+"No Reports";
+
+media.innerHTML=
+"No Media";
+
+return;
+
+}
 
 box.innerHTML="";
 
-load()
+media.innerHTML="";
 
-.forEach((x,i)=>{
+reports.forEach(
+
+(x,i)=>{
 
 box.innerHTML+=`
 
-<div class="card">
-
-<div>
+<div class="report">
 
 ${
 x.photo
-
 ?
 
 `<img
-src="${x.photo}"
-style="
-width:120px;
-height:120px;
-object-fit:cover;
-border-radius:12px;
-margin-bottom:10px;
-">`
+src="${x.photo}">
+`
 
 :
 
 ""
+
 }
 
-<h3>${x.name}</h3>
+<h3>
+
+${x.name}
+
+</h3>
 
 <p>
+
 Market:
 ${x.market}
+
 </p>
 
 <p>
+
 Pair:
 ${x.pair}
+
 </p>
 
 <p>
+
 Win:
 ${x.win}
+
 </p>
-
-</div>
-
 
 <div class="actions">
 
 <button
-onclick="
-play(${i})
-"
-class="play">
+class="play"
+
+onclick="playVideo(
+'${x.video}'
+)">
 
 ▶ Play
 
 </button>
 
-
 <button
-onclick="
-view(${i})
-"
-class="view">
+class="view"
+
+onclick="viewPhoto(
+'${x.photo}'
+)">
 
 🖼 View
 
 </button>
 
-
 <button
-onclick="
-removeReport(${i})
-"
-class="del">
+class="delete"
+
+onclick="del(
+${i}
+)">
 
 🗑 Delete
 
@@ -195,87 +283,85 @@ class="del">
 
 `;
 
-});
+if(x.photo){
+
+media.innerHTML+=`
+
+<img
+src="${x.photo}"
+style="
+width:140px;
+margin:10px;
+border-radius:15px;
+">
+
+`;
 
 }
 
+}
 
+);
 
-function play(i){
+}
 
-const url=
-load()[i]?.video;
+/* BUTTONS */
 
-if(!url){
+function playVideo(v){
+
+if(v){
+
+window.open(v);
+
+}else{
 
 alert(
 "No Video"
 );
 
-return;
+}
 
 }
+
+function viewPhoto(p){
+
+if(p){
 
 window.open(
-url,
-"_blank"
+p
 );
 
-}
-
-
-
-function view(i){
-
-const img=
-load()[i]?.photo;
-
-if(!img){
+}else{
 
 alert(
-"No Photo Saved"
-);
-
-return;
-
-}
-
-window.open(
-img,
-"_blank"
+"No Photo"
 );
 
 }
 
+}
 
+function del(i){
 
-function removeReport(i){
-
-let data=
-load();
-
-data.splice(
+reports.splice(
 i,
 1
 );
 
-save(
-data
+localStorage.setItem(
+
+"rb_reports",
+
+JSON.stringify(
+reports
+)
+
 );
 
 render();
 
 }
 
-
-
-document
-.getElementById(
-"save"
-)
-?.addEventListener(
-"click",
-saveSetup
-);
+/* START */
 
 render();
