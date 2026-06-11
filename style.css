@@ -331,5 +331,27 @@ flex-direction:column;
 width:100%;
 
 }
+/* PAGE FIX */
 
+.page{
+display:none !important;
+}
+
+.page.active-page{
+display:block !important;
+}
+
+/* প্রথম পেজ খোলা */
+
+#trading{
+display:block;
+}
+
+/* আগের ডিজাইন থাকবে */
+
+.main{
+
+overflow:hidden;
+
+}
 }
