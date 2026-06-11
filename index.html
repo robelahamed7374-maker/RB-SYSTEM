@@ -152,7 +152,7 @@ id="photo"
 placeholder="Photo Description">
 
 <input
-type="file">
+<input id="photoFile" type="file" accept="image/*">
 
 <button
 id="save">
@@ -311,7 +311,12 @@ Clear Data
 <script
 src="script.js">
 </script>
-
+<div id="photoModal" class="modal">
+  <div class="modal-content">
+    <button id="closePhotoModal" class="modal-close">✕</button>
+    <img id="modalPhoto" alt="Preview">
+  </div>
+</div>
 </body>
 
 </html>
