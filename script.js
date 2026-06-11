@@ -416,7 +416,68 @@ location.reload();
 }
 
 };
+/* SIDEBAR FIX */
 
+document
+.querySelectorAll(".menu")
+.forEach(btn=>{
+
+btn.onclick=()=>{
+
+document
+
+.querySelectorAll(".menu")
+
+.forEach(
+x=>
+x.classList.remove(
+"active"
+)
+
+);
+
+btn.classList.add(
+"active"
+);
+
+document
+
+.querySelectorAll(".page")
+
+.forEach(
+x=>
+x.classList.remove(
+"active-page"
+)
+
+);
+
+let id=
+
+btn.dataset.page;
+
+document
+
+.getElementById(id)
+
+.classList.add(
+"active-page"
+);
+
+};
+
+});
+
+
+document
+
+.getElementById(
+"trading"
+)
+
+.classList.add(
+"active-page"
+);
 }
 
 
