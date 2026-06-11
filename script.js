@@ -64,7 +64,13 @@ document
 .files[0];
 
 if(f){
+let file=document.getElementById("photo").files[0];
 
+if(file){
+
+photo=await img(file);
+
+}
 photo=
 
 await img(f);
