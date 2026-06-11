@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1">
 
 <title>
 RB SYSTEM
 </title>
 
-<link rel="stylesheet"
+<link
+rel="stylesheet"
 href="style.css">
 
 </head>
@@ -28,61 +30,82 @@ href="style.css">
 <div class="logo">
 
 <h1>
+
 <span class="green">
 RB
 </span>
 
 SYSTEM
+
 </h1>
 
 <p>
+
 TRADING DASHBOARD
+
 </p>
 
 </div>
 
+
+
 <nav>
 
 <button class="menu active">
+
 📊 Trading Setup
+
 </button>
 
 <button class="menu">
+
 📁 Reports Box
+
 </button>
 
 <button class="menu">
+
 🖼 Media Box
+
 </button>
 
 <button class="menu">
+
 📝 Notes Box
+
 </button>
 
 <button class="menu">
+
 🕒 History Box
+
 </button>
 
 <button class="menu">
+
 ⚙ Settings Box
+
 </button>
 
 </nav>
 
-<div class="copyright">
-
-© 2025 RB System
-
-</div>
-
 </aside>
+
 
 
 <!-- MAIN -->
 
 <main class="main">
 
-<section class="setup-card">
+
+
+<!-- PAGE 1 -->
+
+<section
+id="trading"
+class="page active-page">
+
+<div class="setup-card">
 
 <div class="top">
 
@@ -104,7 +127,7 @@ Reset
 <div class="grid">
 
 <input
-placeholder="Ex: OTC Breakout">
+placeholder="Setup Name">
 
 <select>
 
@@ -113,22 +136,24 @@ OTC
 </option>
 
 <option>
-Real Market
+REAL
 </option>
 
 </select>
 
-<input
-placeholder="Ex: EUR/USD">
 
 <input
-placeholder="Ex: 80%">
+placeholder="Pair">
+
+<input
+placeholder="Win Rate">
+
 
 </div>
 
 
 <textarea
-placeholder="এখানে তোমার সেটআপ এবং স্ট্রাটেজি লিখো...">
+placeholder="Write Strategy">
 </textarea>
 
 
@@ -138,7 +163,7 @@ placeholder="এখানে তোমার সেটআপ এবং স্ট
 placeholder="Video Link">
 
 <input
-placeholder="Photo Description">
+placeholder="Photo Name">
 
 </div>
 
@@ -153,38 +178,182 @@ type="file">
 
 </button>
 
-</section>
 
-
-
-<section class="saved">
-
-<div class="saved-head">
-
-<h3>
-
-Saved Trading Setups
-
-</h3>
-
-<input
-placeholder="Search setups...">
-
-</div>
-
+<div class="saved">
 
 <div id="list">
 
 </div>
 
+</div>
+
+</div>
+
 </section>
+
+
+
+
+
+<!-- PAGE 2 -->
+
+<section
+id="reports"
+class="page">
+
+<h2>
+
+📁 Reports Box
+
+</h2>
+
+<div class="page-box">
+
+<input
+placeholder="Search reports...">
+
+<br><br>
+
+<div id="reportList">
+
+No Reports
+
+</div>
+
+</div>
+
+</section>
+
+
+
+
+
+<!-- PAGE 3 -->
+
+<section
+id="media"
+class="page">
+
+<h2>
+
+🖼 Media Box
+
+</h2>
+
+<div class="page-box">
+
+Photo Gallery
+
+<br><br>
+
+Video Gallery
+
+</div>
+
+</section>
+
+
+
+
+
+<!-- PAGE 4 -->
+
+<section
+id="notes"
+class="page">
+
+<h2>
+
+📝 Notes Box
+
+</h2>
+
+<div class="page-box">
+
+<input
+placeholder="Note">
+
+<br><br>
+
+<textarea>
+
+</textarea>
+
+<br><br>
+
+<button
+onclick="saveNote()">
+
+Save Note
+
+</button>
+
+</div>
+
+</section>
+
+
+
+
+
+<!-- PAGE 5 -->
+
+<section
+id="history"
+class="page">
+
+<h2>
+
+🕒 History Box
+
+</h2>
+
+<div class="page-box">
+
+History Here
+
+</div>
+
+</section>
+
+
+
+
+
+<!-- PAGE 6 -->
+
+<section
+id="settings"
+class="page">
+
+<h2>
+
+⚙ Settings Box
+
+</h2>
+
+<div class="page-box">
+
+<button
+onclick="clearAll()">
+
+Clear All Data
+
+</button>
+
+</div>
+
+</section>
+
 
 </main>
 
 </div>
 
 
-<script src="script.js"></script>
+<script
+src="script.js">
+</script>
 
 </body>
 
