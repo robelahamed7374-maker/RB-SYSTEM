@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 
 <meta charset="UTF-8">
 
-<meta
-name="viewport"
-content="width=device-width,initial-scale=1">
+<meta name="viewport"
+content="width=device-width, initial-scale=1">
 
 <title>
 RB SYSTEM
@@ -31,7 +30,7 @@ href="style.css">
 
 <h1>
 
-<span class="green">
+<span>
 RB
 </span>
 
@@ -48,46 +47,47 @@ TRADING DASHBOARD
 </div>
 
 
-
-<nav>
-
-<button class="menu active">
+<button class="menu active"
+data-page="trading">
 
 📊 Trading Setup
 
 </button>
 
-<button class="menu">
+<button class="menu"
+data-page="reports">
 
 📁 Reports Box
 
 </button>
 
-<button class="menu">
+<button class="menu"
+data-page="media">
 
 🖼 Media Box
 
 </button>
 
-<button class="menu">
+<button class="menu"
+data-page="notes">
 
 📝 Notes Box
 
 </button>
 
-<button class="menu">
+<button class="menu"
+data-page="history">
 
 🕒 History Box
 
 </button>
 
-<button class="menu">
+<button class="menu"
+data-page="settings">
 
 ⚙ Settings Box
 
 </button>
-
-</nav>
 
 </aside>
 
@@ -99,15 +99,13 @@ TRADING DASHBOARD
 
 
 
-<!-- PAGE 1 -->
+<!-- TRADING -->
 
 <section
 id="trading"
 class="page active-page">
 
-<div class="setup-card">
-
-<div class="top">
+<div class="box">
 
 <h2>
 
@@ -115,77 +113,53 @@ class="page active-page">
 
 </h2>
 
-<button id="reset">
-
-Reset
-
-</button>
-
-</div>
-
-
-<div class="grid">
-
 <input
+id="name"
 placeholder="Setup Name">
 
-<select>
+<select
+id="market">
 
 <option>
 OTC
 </option>
 
 <option>
-REAL
+Real Market
 </option>
 
 </select>
 
-
 <input
+id="pair"
 placeholder="Pair">
 
 <input
+id="win"
 placeholder="Win Rate">
 
-
-</div>
-
-
 <textarea
+id="note"
 placeholder="Write Strategy">
 </textarea>
 
-
-<div class="grid">
-
 <input
+id="video"
 placeholder="Video Link">
 
 <input
-placeholder="Photo Name">
-
-</div>
-
+id="photo"
+placeholder="Photo Description">
 
 <input
 type="file">
 
-
-<button id="save">
+<button
+id="save">
 
 💾 SAVE
 
 </button>
-
-
-<div class="saved">
-
-<div id="list">
-
-</div>
-
-</div>
 
 </div>
 
@@ -193,13 +167,13 @@ type="file">
 
 
 
-
-
-<!-- PAGE 2 -->
+<!-- REPORTS -->
 
 <section
 id="reports"
 class="page">
+
+<div class="box">
 
 <h2>
 
@@ -207,16 +181,12 @@ class="page">
 
 </h2>
 
-<div class="page-box">
-
 <input
-placeholder="Search reports...">
+placeholder="Search..."
+id="search">
 
-<br><br>
-
-<div id="reportList">
-
-No Reports
+<div
+id="reportList">
 
 </div>
 
@@ -226,13 +196,13 @@ No Reports
 
 
 
-
-
-<!-- PAGE 3 -->
+<!-- MEDIA -->
 
 <section
 id="media"
 class="page">
+
+<div class="box">
 
 <h2>
 
@@ -240,13 +210,12 @@ class="page">
 
 </h2>
 
-<div class="page-box">
+<div
+id="mediaList">
 
-Photo Gallery
+No Media
 
-<br><br>
-
-Video Gallery
+</div>
 
 </div>
 
@@ -254,13 +223,13 @@ Video Gallery
 
 
 
-
-
-<!-- PAGE 4 -->
+<!-- NOTES -->
 
 <section
 id="notes"
 class="page">
+
+<div class="box">
 
 <h2>
 
@@ -268,21 +237,11 @@ class="page">
 
 </h2>
 
-<div class="page-box">
-
-<input
-placeholder="Note">
-
-<br><br>
-
-<textarea>
-
+<textarea
+id="noteText">
 </textarea>
 
-<br><br>
-
-<button
-onclick="saveNote()">
+<button>
 
 Save Note
 
@@ -294,13 +253,13 @@ Save Note
 
 
 
-
-
-<!-- PAGE 5 -->
+<!-- HISTORY -->
 
 <section
 id="history"
 class="page">
+
+<div class="box">
 
 <h2>
 
@@ -308,9 +267,11 @@ class="page">
 
 </h2>
 
-<div class="page-box">
+<div>
 
-History Here
+No History
+
+</div>
 
 </div>
 
@@ -318,26 +279,23 @@ History Here
 
 
 
-
-
-<!-- PAGE 6 -->
+<!-- SETTINGS -->
 
 <section
 id="settings"
 class="page">
 
+<div class="box">
+
 <h2>
 
-⚙ Settings Box
+⚙ Settings
 
 </h2>
 
-<div class="page-box">
+<button>
 
-<button
-onclick="clearAll()">
-
-Clear All Data
+Clear Data
 
 </button>
 
@@ -349,7 +307,6 @@ Clear All Data
 </main>
 
 </div>
-
 
 <script
 src="script.js">
