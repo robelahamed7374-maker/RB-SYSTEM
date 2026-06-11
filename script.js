@@ -1,39 +1,42 @@
+// RB SYSTEM NEW SCRIPT
+
+const STORAGE="rb_reports";
+
 function load(){
-
 return JSON.parse(
-
-localStorage.getItem(
-"rb"
-)
-
-||"[]"
-
+localStorage.getItem(STORAGE)||"[]"
 );
-
 }
 
-function save(x){
-
+function save(data){
 localStorage.setItem(
-"rb",
-JSON.stringify(x)
+STORAGE,
+JSON.stringify(data)
 );
+}
+
+function toBase64(file){
+
+return new Promise((ok)=>{
+
+if(!file){
+
+ok("");
+
+return;
 
 }
 
-async function img(file){
-
-return new Promise(r=>{
-
-let fr=
+const reader=
 new FileReader();
 
-fr.onload=
-()=>r(fr.result);
-
-fr.readAsDataURL(
-file
+reader.onload=
+()=>ok(
+reader.result
 );
+
+reader.readAsDataURL(
+file);
 
 });
 
@@ -41,70 +44,41 @@ file
 
 
 
+async function saveSetup(){
+
+const photoFile=
 document
-
-.getElementById(
-"save"
-)
-
-.onclick=
-
-async()=>{
-
-let photo="";
-
-let f=
-
-document
-
 .getElementById(
 "photo"
-)
+)?.files[0];
 
-.files[0];
+const photo=
+await toBase64(
+photoFile
+);
 
-if(f){
-let file=document.getElementById("photo").files[0];
-
-if(file){
-
-photo=await img(file);
-
-}
-photo=
-
-await img(f);
-
-}
-
-let data=
+const data=
 load();
 
 data.unshift({
 
 name:
-
-name.value,
+document.getElementById("name").value,
 
 market:
-
-market.value,
+document.getElementById("market").value,
 
 pair:
-
-pair.value,
+document.getElementById("pair").value,
 
 win:
-
-win.value,
+document.getElementById("win").value,
 
 note:
-
-note.value,
+document.getElementById("note").value,
 
 video:
-
-video.value,
+document.getElementById("video").value,
 
 photo
 
@@ -114,19 +88,20 @@ save(data);
 
 render();
 
-};
+alert("Saved");
+
+}
 
 
 
 function render(){
 
-let box=
-
-document
-
-.getElementById(
+const box=
+document.getElementById(
 "reportList"
 );
+
+if(!box)return;
 
 box.innerHTML="";
 
@@ -136,7 +111,7 @@ load()
 
 box.innerHTML+=`
 
-<div class=card>
+<div class="card">
 
 <div>
 
@@ -147,45 +122,46 @@ x.photo
 
 `<img
 src="${x.photo}"
-width=120>`
+style="
+width:120px;
+height:120px;
+object-fit:cover;
+border-radius:12px;
+margin-bottom:10px;
+">`
 
 :
 
 ""
 }
 
-<h2>
-
-${x.name}
-
-</h2>
+<h3>${x.name}</h3>
 
 <p>
+Market:
 ${x.market}
 </p>
 
 <p>
+Pair:
 ${x.pair}
 </p>
 
 <p>
+Win:
 ${x.win}
 </p>
 
 </div>
 
 
-<div class=actions>
+<div class="actions">
 
 <button
-class=play
-
 onclick="
-window.open(
-'${x.video}'
-)
-
-">
+play(${i})
+"
+class="play">
 
 ▶ Play
 
@@ -193,17 +169,10 @@ window.open(
 
 
 <button
-class=view
-
 onclick="
-
-window.open(
-
-'${x.photo}'
-
-)
-
-">
+view(${i})
+"
+class="view">
 
 🖼 View
 
@@ -211,20 +180,10 @@ window.open(
 
 
 <button
-
-class=del
-
 onclick="
-
-del(
-
-${i}
-
-)
-
+removeReport(${i})
 "
-
->
+class="del">
 
 🗑 Delete
 
@@ -242,20 +201,81 @@ ${i}
 
 
 
-function del(i){
+function play(i){
 
-let d=
+const url=
+load()[i]?.video;
+
+if(!url){
+
+alert(
+"No Video"
+);
+
+return;
+
+}
+
+window.open(
+url,
+"_blank"
+);
+
+}
+
+
+
+function view(i){
+
+const img=
+load()[i]?.photo;
+
+if(!img){
+
+alert(
+"No Photo Saved"
+);
+
+return;
+
+}
+
+window.open(
+img,
+"_blank"
+);
+
+}
+
+
+
+function removeReport(i){
+
+let data=
 load();
 
-d.splice(
+data.splice(
 i,
 1
 );
 
-save(d);
+save(
+data
+);
 
 render();
 
 }
+
+
+
+document
+.getElementById(
+"save"
+)
+?.addEventListener(
+"click",
+saveSetup
+);
 
 render();
