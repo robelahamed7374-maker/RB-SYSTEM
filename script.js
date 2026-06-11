@@ -1,212 +1,241 @@
-const list=document.getElementById("list");
-const save=document.getElementById("save");
+/* ========= SIDEBAR NAVIGATION ========= */
 
-function timeNow(){
-return new Date().toLocaleString();
+const menus =
+document.querySelectorAll(
+".menu"
+);
+
+const pages =
+document.querySelectorAll(
+".page"
+);
+
+menus.forEach((btn,index)=>{
+
+btn.addEventListener(
+"click",
+
+()=>{
+
+menus.forEach(
+x=>
+x.classList.remove(
+"active"
+)
+);
+
+pages.forEach(
+x=>
+x.classList.remove(
+"active-page"
+)
+);
+
+btn.classList.add(
+"active"
+);
+
+if(index===0){
+
+document
+.getElementById(
+"trading"
+)
+.classList.add(
+"active-page"
+);
+
 }
 
-function draw(){
+if(index===1){
 
-let data=
+document
+.getElementById(
+"reports"
+)
+.classList.add(
+"active-page"
+);
+
+}
+
+if(index===2){
+
+document
+.getElementById(
+"media"
+)
+.classList.add(
+"active-page"
+);
+
+}
+
+if(index===3){
+
+document
+.getElementById(
+"notes"
+)
+.classList.add(
+"active-page"
+);
+
+}
+
+if(index===4){
+
+document
+.getElementById(
+"history"
+)
+.classList.add(
+"active-page"
+);
+
+}
+
+if(index===5){
+
+document
+.getElementById(
+"settings"
+)
+.classList.add(
+"active-page"
+);
+
+}
+
+}
+
+);
+
+});
+
+
+/* ========= REPORT AUTO LOAD ========= */
+
+function updateReports(){
+
+let reports=
+
 JSON.parse(
 localStorage.getItem(
 "rb_system"
-))||[];
+)
+)||[];
 
-list.innerHTML="";
+let box=
 
-data.forEach((x,i)=>{
+document.getElementById(
+"reportList"
+);
 
-list.innerHTML+=`
+if(!box)
+return;
+
+box.innerHTML="";
+
+reports.forEach(
+r=>{
+
+box.innerHTML+=`
 
 <div class="card">
 
-<div>
+<h3>
 
-<h2>
-${x.name}
-</h2>
+${r.name}
+
+</h3>
 
 <br>
 
-<div>
 Market:
-${x.market}
-</div>
+${r.market}
 
-<br>
+<br><br>
 
-<div>
 Pair:
-${x.pair}
-</div>
+${r.pair}
 
-<br>
+<br><br>
 
-<div>
-Win Rate:
-${x.win}
-</div>
-
-<br>
-
-<div>
-${x.note}
-</div>
-
-</div>
-
-
-<div class="card-right">
-
-<div class="time">
-${x.time}
-</div>
-
-<button
-class="action play"
-onclick="playVideo('${x.video}')">
-
-▶ Play Video
-
-</button>
-
-<button
-class="action photo"
-onclick="viewPhoto()">
-
-🖼 View Photo
-
-</button>
-
-<button
-class="action delete"
-onclick="removeItem(${i})">
-
-🗑 Delete
-
-</button>
-
-</div>
+Win:
+${r.win}
 
 </div>
 
 `;
 
-});
+}
+
+);
 
 }
 
+updateReports();
 
 
-save.onclick=()=>{
+/* ========= NOTES ========= */
 
-let all=
-document.querySelectorAll(
-"input"
+function saveNote(){
+
+let note=
+
+prompt(
+"Write note"
 );
 
-let select=
-document.querySelector(
-"select"
-);
-
-let txt=
-document.querySelector(
-"textarea"
-);
-
-let obj={
-
-name:
-all[0].value,
-
-market:
-select.value,
-
-pair:
-all[1].value,
-
-win:
-all[2].value,
-
-note:
-txt.value,
-
-video:
-all[3].value,
-
-time:
-timeNow()
-
-};
+if(!note)
+return;
 
 let data=
+
 JSON.parse(
 localStorage.getItem(
-"rb_system"
-))||[];
+"rb_notes"
+)
 
-data.unshift(obj);
+)||[];
+
+data.unshift(
+note
+);
 
 localStorage.setItem(
-"rb_system",
-JSON.stringify(data)
+
+"rb_notes",
+
+JSON.stringify(
+data)
+
 );
-
-draw();
-
-};
-
-
-
-function removeItem(i){
-
-let data=
-JSON.parse(
-localStorage.getItem(
-"rb_system"
-))||[];
-
-data.splice(i,1);
-
-localStorage.setItem(
-"rb_system",
-JSON.stringify(data)
-);
-
-draw();
-
-}
-
-
-
-function playVideo(url){
-
-if(url){
-
-window.open(url);
-
-}else{
 
 alert(
-"No Video"
-);
-
-}
-
-}
-
-
-
-function viewPhoto(){
-
-alert(
-"Photo Preview"
+"Saved"
 );
 
 }
 
 
+/* ========= SETTINGS ========= */
 
-draw();
+function clearAll(){
+
+if(
+
+confirm(
+"Delete all data?"
+)
+
+){
+
+localStorage.clear();
+
+location.reload();
+
+}
+
+}
